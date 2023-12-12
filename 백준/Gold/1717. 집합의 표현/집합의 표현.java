@@ -5,56 +5,58 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	
+
+	//초기에 n+1개의 집합(0~n) 존재 - 합집합 연산 / 두 원소가 같은 집합인지 
+	//m개의 연산 주어짐 - 0: 합집합 / 1: 같은 집합인지 확인
+	//같은 집합이면 YES, 아니면 NO
 	static int n, m;
+	static int[] p;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 		StringBuilder sb = new StringBuilder();
 		
-		n = Integer.parseInt(st.nextToken()); //0부터 n까지, n+1개의 집합이 있음
-		m = Integer.parseInt(st.nextToken()); //연산의 개수
-		
+		p = new int[n+1];
 		//집합 생성
-		int[] p = new int[n+1];
-		for (int i = 1; i < n+1; i++) {
-			makeset(i, p);
+		for (int i = 0; i <= n; i++) {
+			makeSet(i);
 		}
 		
-		//0 a b 합집합
-		//1 a b 같은 집합인지 확인해서 YES / NO
+		//명령어 m개 주어짐
 		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(br.readLine(), " ");
+			st = new StringTokenizer(br.readLine());
 			int order = Integer.parseInt(st.nextToken());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
-			if(order==0) {
-				union(a, b, p);
-			} else if(order==1) {
-				if(findset(a, p) != findset(b, p)) {
-					sb.append("NO"+"\n");
+			
+			if(order == 0) {
+				union(a, b);
+			} else {
+				if (findSet(a) == findSet(b)) {
+					sb.append("YES").append("\n");
 				} else {
-					sb.append("YES"+"\n");
+					sb.append("NO").append("\n");					
 				}
 			}
 		}
 		System.out.println(sb);
 	}
 
-	private static void union(int a, int b, int[] p) {
-		p[findset(a, p)] = findset(b, p);
-		
+	private static void makeSet(int i) {
+		p[i] = i;
 	}
 
-	private static int findset(int a, int[] p) {
-		if(a != p[a]) { //a의 대표가 a가 아니면
-			p[a] = findset(p[a], p);
+	private static int findSet(int a) {
+		if(a != p[a]) {
+			p[a] = findSet(p[a]);
 		}
 		return p[a];
 	}
 
-	private static void makeset(int i, int[] p) {
-		p[i] = i; //i의 대표는 i
+	private static void union(int a, int b) {
+		p[findSet(a)] = findSet(b);
 	}
 }
