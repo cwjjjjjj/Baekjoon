@@ -2,47 +2,38 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	public static StringBuilder sb = new StringBuilder();
-	public static int num = 0;
-	
-	public static boolean recursion(char[] S, int l, int r) {
-		num++;
-		boolean b;
-		if(l >= r) {
-			b = true;
-		} else if(S[l] != S[r]) {
-			b = false;
-		} else {
-			return recursion (S, l+1, r-1);
-		}
-		return b;
-	}
-	
-	public static boolean isPalindrome(char[] S) {
-		return recursion(S, 0, S.length -1 );
-	}
-	
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		int T = Integer.parseInt(br.readLine()); //tc의 개수
+	static int times = 0;
+	public static void main(String[] args) throws IOException {
+		//팰린드롬 여부 판단
+		//S를 함수의 인자로 전달, rec 함수 몇 번 호출되는지 확인
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		
-		for(int tc = 0; tc < T; tc++) {
-			String tmp = br.readLine(); //문자열 입력
-			char[] S = new char[tmp.length()];
-			for(int i = 0; i < tmp.length(); i++) {
-				S[i] = tmp.charAt(i);
-			}
-			if(recursion(S, 0, S.length -1)) {
-				sb.append(1+" ");
-			} else {
-				sb.append(0+" ");
-			}
-			sb.append(num+"\n");
-			num = 0;
+		int TC = Integer.parseInt(st.nextToken());
+		for(int t = 0; t < TC; t++) {
+			times = 0;
+			st = new StringTokenizer(br.readLine(), " ");
+			String str = st.nextToken();
+			isPalindrome(str);
+			System.out.println();
 		}
-		System.out.println(sb);
+	}
+	
+	public static void isPalindrome(String s) {
+		System.out.printf(recursion(s, 0, s.length()-1) +" "+times);			
+	}
+	
+	public static int recursion(String s, int l, int r) {
+		times++;
+		if(l >= r) {
+			return 1;
+		} else if (s.charAt(l) != s.charAt(r)) {
+			return 0;
+		} else {
+			return recursion(s, l+1, r-1);
+		}
 	}
 }
