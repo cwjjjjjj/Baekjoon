@@ -4,9 +4,9 @@ class Solution {
         if(n % slice > 0) {
             answer++;
         }
-        if(answer == 0) {
-            return 1;
-        }
+        // if(answer == 0) {
+        //     return 1;
+        // }
         return answer;
     }
 }
